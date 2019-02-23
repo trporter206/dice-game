@@ -1,13 +1,38 @@
 import random
+import os
 
 dice_sides = 6
-dice = range(dice_sides)
+dice = range(1,dice_sides)
 
 def roll_dice():
     return random.choice(dice)
 
-def game1():
-    return 0
+def first_to_winner(scores, target):
+    print scores
+    diffs = [0]*len(scores)
+    for index, s in enumerate(scores):
+        if s is target:
+            print('player '+str(index+1)+' wins!')
+            break
+        elif s < target:
+            diffs[index] = None
+        else:
+            diffs[index] = s-target
+    print('player '+str(diffs.index(min(x for x in diffs if x is not None))+1)+' wins!'+'\n')
+    interface()
+
+def first_to(players,target,max_rounds=50):
+    os.system('clear')
+    scores = [0]*players
+    for i in range(1,max_rounds):
+        print(' ')
+        print('round '+str(i))
+        for index, s in enumerate(scores, start=1):
+            scores[index-1]+= roll_dice()
+            print('player '+str(index)+' score: '+str(s))
+        if any(i >= target for i in scores):
+            first_to_winner(scores, target)
+            break
 
 def game2():
     return 0
@@ -24,16 +49,19 @@ def interface():
     def choose():
         choice = input("enter number: ")
         if choice == 1:
-            print roll_dice()
+            print(str(roll_dice())+'\n')
+            interface()
         elif choice == 2:
-            print "1: game1"
+            print "1: first to"
             print "2: game2"
             print "3: game3"
             print "4: back"
             game = input("what game?: ")
 
             if game == 1:
-                game1()
+                players = input("number of players: ")
+                target = input("target number: ")
+                first_to(players,target)
             elif game == 2:
                 game2()
             elif game == 3:
