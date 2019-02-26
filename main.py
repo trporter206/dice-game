@@ -34,14 +34,30 @@ def first_to(players,target,max_rounds=50):
             first_to_helper(scores, target)
             break
 
-def twenty_one_helper():
-    return 45
+def twenty_one_helper(score=0):
+    print("current score: "+str(score))
+    choice = input("hit(0) or stay(1)? ")
+    if choice is 0:
+        score+= roll_dice()
+        if score > 21:
+            print('over 21, you lose!')
+            score = None
+            return score
+        return twenty_one_helper(score)
+    elif choice is 1:
+        points = 21 - score
+        return points
+    else:
+        print("invalid choice, choose again")
+        return twenty_one_helper(score)
 
 def twenty_one(players):
     scores = [0]*players
-    for i in range(1,players):
+    for i in range(1,players+1):
+        print('player '+str(i)+'s'+' turn')
         scores[i-1] = twenty_one_helper()
         print('player '+str(i)+' score: '+str(scores[i-1]))
+    print scores
     print('player '+str(scores.index(min(x for x in scores if x is not None))+1)+' wins!'+'\n')
     interface()
 
